@@ -17,6 +17,8 @@ from keras.optimizers import SGD
 import matplotlib.pylab as pylab
 pylab.rcParams['figure.figsize'] = 16, 12       # za prikaz većih slika i plotova
 
+import win32com.client as wincl
+
 def ucitavanje_slike(putaja):
     ''' Funckija za ucitavanje slike sa diska pomocu openCV, koja kao parametar prima putanju do slike.
     Ucitana slika je numPy matrica. OpenCv ucitava sliku kao BGR, pa se ona koncertuje u RGB.
@@ -62,22 +64,6 @@ def binarizacija_slike(siva_slika):
     # ili ret, image_bin = cv2.threshold(image_gray, 127, 255, cv2.THRESH_BINARY)
     return image_bin
 
-def dilatacija(image):
-    ''' Funkcija koja vrsi dilataciju slike. To je morfoloska operacija i koristi se za uklanjanje raznih sumova i smetnji
-    koji su posledice obrade slike tj.konvertovanja, binarizacije. Vrsi se nad binarnom slikom.
-    Menja sliku pomocu kernela, koji je 3x3 matrica. Kernel se postavlja preko svakog piksela na slici i poredi
-    se sa susednim el.koje zahvata.'''
-    kernel = np.ones((3,3))
-    return cv2.dilate(image, kernel, iterations=1)
-
-def erozija(image):
-    ''' Funkcija koja vrsi dilataciju slike. To je morfoloska operacija i koristi se za uklanjanje raznih sumova i smetnji
-    koji su posledice obrade slike tj.konvertovanja, binarizacije. Vrsi se nad binarnom slikom.
-    Menja sliku pomocu kernela, koji je 3x3 matrica. Kernel se postavlja preko svakog piksela na slici i poredi
-    se sa susednim el.koje zahvata.'''
-    kernel = np.ones((3,3))
-    return cv2.erode(image, kernel, iterations=1)
-
 def resize(region):
     ''' Funkcija koja transformise sliku u sliku dimenzija 28x28'''
     return cv2.resize(region,(28,28), interpolation = cv2.INTER_NEAREST)
@@ -119,7 +105,7 @@ def selektovanje_regiona(image_orig, image_bin):
         red+=1
         ponovo=1
         pocetakVisina=pomocni
-        print "Tuuu", pocetakVisina
+        #print "Tuuu", pocetakVisina
         pamti=0
         for s in range(0,sirina):
             t = 0
@@ -200,13 +186,13 @@ def selektovanje_regiona(image_orig, image_bin):
             razmaci[-1] += x
             pom=red
         dodaj=x+w
-        print razmaci[-1],razmak
+        #print razmaci[-1],razmak
         if razmaci[-1]>razmak:
             razmak=razmaci[-1]
         razmaci.append(-x - w )
     razmaci[-1] += sortirane_regije[-1][0]
-    for i in razmaci:
-        print i
+    #for i in razmaci:
+     #   print i
     return image_orig, lista_sortiranih_regiona[:, 0], razmaci
 
 def skaliranje(image):
@@ -296,11 +282,9 @@ def treniraj(ann, X_train, y_train):
 def prikaz_slike(image, color= False):
     ''' Funkcija za prikaz slike'''
     if color:
-        print ("color")
         plt.imshow(image)
         plt.show()
     else:
-        print ("gray")
         plt.imshow(image, 'gray')
         plt.show()
 
@@ -426,7 +410,7 @@ def obradi_sliku():
 
 def selektuj_regione(slika, slika_bin):
     regioni, slova, razmaci = selektovanje_regiona(slika.copy(), slika_bin)
-    prikaz_slike(regioni)
+    #prikaz_slike(regioni)
     print 'Broj prepoznatih regiona:', len(slova)
     return regioni, slova, razmaci
 
@@ -439,11 +423,15 @@ def istreniraj(slova):
     model = treniraj(model, ulazi, izlazi)
     return model, abeceda
 
-def testiraj(model, abeceda):
+def pricaj(tekst):
+    speak = wincl.Dispatch("SAPI.SpVoice")
+    speak.Speak(tekst)
+
+def test1(model, abeceda):
     image_color = ucitavanje_slike('images/test/test1.png')
     img = binarizacija_slike(konvertovanje_slike_u_sivo(image_color))
     regioni, slova, razmaci = selektovanje_regiona(image_color.copy(), img)
-    prikaz_slike(regioni)
+    #prikaz_slike(regioni)
     print 'Broj prepoznatih regiona:', len(slova)
 
     razmaci = np.array(razmaci).reshape(len(razmaci), 1)
@@ -452,9 +440,12 @@ def testiraj(model, abeceda):
 
     inputs = spremi_za_nm(slova)
     results = model.predict(np.array(inputs, np.float32))
-    print prikaz_rezultata(results, abeceda, k_means)
+    tekst = prikaz_rezultata(results, abeceda, k_means)
+    print tekst
 
-    abeceda2 = ['V', 'O', 'D', 'A', 'J', 'E', 'P', 'L', 'A', 'V', 'A']
+    pricaj(tekst)
+
+    abeceda2 = ['T', 'H', 'E', 'W', 'A', 'T', 'E', 'R', 'I', 'S', 'B', 'L','U','E']
     brPogodjenih=0
     index=0;
     for idx, output in enumerate(results[0:, :]):
@@ -463,12 +454,13 @@ def testiraj(model, abeceda):
         index+=1
     procenat = brPogodjenih/len(abeceda2)*100
     print "Ukupno pogodjenih: ",brPogodjenih, "od: ", len(abeceda2)
-    print ("a to je: %.2f%%" %procenat)
+    print ("a to je: %.2f" %procenat)
 
 def main():
     slika, slika_bin = obradi_sliku()
     regioni, slova, razmaci = selektuj_regione(slika, slika_bin)
     model, abeceda = istreniraj(slova)
-    testiraj(model, abeceda)
+    test1(model, abeceda)
+    
 if __name__ == "__main__":
     main()
