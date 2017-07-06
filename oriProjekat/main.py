@@ -632,15 +632,262 @@ def test5(model, abeceda):
     print "Ukupno pogodjenih reci: %.0f " % (brPogodjenihReci), "od: ", len(reci)
     print "a to je: %.2f %%" % (procenatPogodjenihReci)
 
+def test6(model, abeceda):
+    image_color = ucitavanje_slike('images/test/test6.png')
+    img = binarizacija_slike(konvertovanje_slike_u_sivo(image_color))
+    regioni, slova, razmaci = selektovanje_regiona(image_color.copy(), img)
+    #prikaz_slike(regioni)
+    print 'Broj prepoznatih regiona:', len(slova)
+
+    razmaci = np.array(razmaci).reshape(len(razmaci), 1)
+    k_means = KMeans(n_clusters=2, max_iter=2000, tol=0.00001, n_init=10)
+    k_means.fit(razmaci)
+
+    inputs = spremi_za_nm(slova)
+    results = model.predict(np.array(inputs, np.float32))
+    tekst = prikaz_rezultata(results, abeceda, k_means)
+    print tekst
+
+    pricaj(tekst)
+
+    abeceda2 = ['H', 'E', 'L', 'L', 'O', 'W', 'O', 'R', 'L','D']
+
+    brPogodjenih=0.00
+    index=0
+    print len(abeceda2)
+    for idx, output in enumerate(results[0:, :]):
+        if abeceda[odredjivanje_pobednika(output)]==abeceda2[index]:
+            brPogodjenih+=1
+        index+=1
+    brAbecede = len(abeceda2)
+    procenat = (brPogodjenih/brAbecede)*100.00
+    print "**********************************"
+    print "Broj i procenat pogodjenih slova:"
+    print "Ukupno pogodjenih: %.0f " %(brPogodjenih), "od: ", len(abeceda2)
+    print "a to je: %.2f %%" %(procenat)
+
+    print "**********************************"
+    print "Broj i procenat pogodjenih reci : "
+    reci = ["HELLO","WORLD"]
+    brPogodjenihReci = 0.00
+    indeks2 =0
+    for t in tekst.split(' '):
+        if t==reci[indeks2]:
+            brPogodjenihReci+=1
+        indeks2+=1
+    brSlova = len(reci)
+    procenatPogodjenihReci = (brPogodjenihReci/brSlova)*100
+    print "Ukupno pogodjenih reci: %.0f " % (brPogodjenihReci), "od: ", len(reci)
+    print "a to je: %.2f %%" % (procenatPogodjenihReci)
+
+def test7(model, abeceda):
+    image_color = ucitavanje_slike('images/test/test7.png')
+    img = binarizacija_slike(konvertovanje_slike_u_sivo(image_color))
+    regioni, slova, razmaci = selektovanje_regiona(image_color.copy(), img)
+    #prikaz_slike(regioni)
+    print 'Broj prepoznatih regiona:', len(slova)
+
+    razmaci = np.array(razmaci).reshape(len(razmaci), 1)
+    k_means = KMeans(n_clusters=2, max_iter=2000, tol=0.00001, n_init=10)
+    k_means.fit(razmaci)
+
+    inputs = spremi_za_nm(slova)
+    results = model.predict(np.array(inputs, np.float32))
+    tekst = prikaz_rezultata(results, abeceda, k_means)
+    print tekst
+
+    pricaj(tekst)
+
+    abeceda2 = ['H', 'E', 'L', 'L', 'O', 'W', 'O', 'R', 'L','D','I','A','M','M','I','L','A','N','A']
+
+    brPogodjenih=0.00
+    index=0
+    print len(abeceda2)
+    for idx, output in enumerate(results[0:, :]):
+        if abeceda[odredjivanje_pobednika(output)]==abeceda2[index]:
+            brPogodjenih+=1
+        index+=1
+    brAbecede = len(abeceda2)
+    procenat = (brPogodjenih/brAbecede)*100.00
+    print "**********************************"
+    print "Broj i procenat pogodjenih slova:"
+    print "Ukupno pogodjenih: %.0f " %(brPogodjenih), "od: ", len(abeceda2)
+    print "a to je: %.2f %%" %(procenat)
+
+    print "**********************************"
+    print "Broj i procenat pogodjenih reci : "
+    reci = ["HELLO","WORLD","I","AM","MILANA"]
+    brPogodjenihReci = 0.00
+    indeks2 =0
+    for t in tekst.split(' '):
+        if t==reci[indeks2]:
+            brPogodjenihReci+=1
+        indeks2+=1
+    brSlova = len(reci)
+    procenatPogodjenihReci = (brPogodjenihReci/brSlova)*100
+    print "Ukupno pogodjenih reci: %.0f " % (brPogodjenihReci), "od: ", len(reci)
+    print "a to je: %.2f %%" % (procenatPogodjenihReci)
+
+def test8(model, abeceda):
+    image_color = ucitavanje_slike('images/test/test8.png')
+    img = binarizacija_slike(konvertovanje_slike_u_sivo(image_color))
+    regioni, slova, razmaci = selektovanje_regiona(image_color.copy(), img)
+    #prikaz_slike(regioni)
+    print 'Broj prepoznatih regiona:', len(slova)
+
+    razmaci = np.array(razmaci).reshape(len(razmaci), 1)
+    k_means = KMeans(n_clusters=2, max_iter=2000, tol=0.00001, n_init=10)
+    k_means.fit(razmaci)
+
+    inputs = spremi_za_nm(slova)
+    results = model.predict(np.array(inputs, np.float32))
+    tekst = prikaz_rezultata(results, abeceda, k_means)
+    print tekst
+
+    pricaj(tekst)
+
+    abeceda2 = ['I','A','M','H','U','N','G','R','Y']
+
+    brPogodjenih=0.00
+    index=0
+    print len(abeceda2)
+    for idx, output in enumerate(results[0:, :]):
+        if abeceda[odredjivanje_pobednika(output)]==abeceda2[index]:
+            brPogodjenih+=1
+        index+=1
+    brAbecede = len(abeceda2)
+    procenat = (brPogodjenih/brAbecede)*100.00
+    print "**********************************"
+    print "Broj i procenat pogodjenih slova:"
+    print "Ukupno pogodjenih: %.0f " %(brPogodjenih), "od: ", len(abeceda2)
+    print "a to je: %.2f %%" %(procenat)
+
+    print "**********************************"
+    print "Broj i procenat pogodjenih reci : "
+    reci = ["I","AM","HUNGRY"]
+    brPogodjenihReci = 0.00
+    indeks2 =0
+    for t in tekst.split(' '):
+        if t==reci[indeks2]:
+            brPogodjenihReci+=1
+        indeks2+=1
+    brSlova = len(reci)
+    procenatPogodjenihReci = (brPogodjenihReci/brSlova)*100
+    print "Ukupno pogodjenih reci: %.0f " % (brPogodjenihReci), "od: ", len(reci)
+    print "a to je: %.2f %%" % (procenatPogodjenihReci)
+
+def test9(model, abeceda):
+    image_color = ucitavanje_slike('images/test/test9.png')
+    img = binarizacija_slike(konvertovanje_slike_u_sivo(image_color))
+    regioni, slova, razmaci = selektovanje_regiona(image_color.copy(), img)
+    prikaz_slike(regioni)
+    print 'Broj prepoznatih regiona:', len(slova)
+
+    razmaci = np.array(razmaci).reshape(len(razmaci), 1)
+    k_means = KMeans(n_clusters=2, max_iter=2000, tol=0.00001, n_init=10)
+    k_means.fit(razmaci)
+
+    inputs = spremi_za_nm(slova)
+    results = model.predict(np.array(inputs, np.float32))
+    tekst = prikaz_rezultata(results, abeceda, k_means)
+    print tekst
+
+    pricaj(tekst)
+
+    abeceda2 = ['S','H','E','I','S','A','G','I','R','L','H','E','I','S','A','B','O','Y']
+
+    brPogodjenih=0.00
+    index=0
+    print len(abeceda2)
+    for idx, output in enumerate(results[0:, :]):
+        if abeceda[odredjivanje_pobednika(output)]==abeceda2[index]:
+            brPogodjenih+=1
+        index+=1
+    brAbecede = len(abeceda2)
+    procenat = (brPogodjenih/brAbecede)*100.00
+    print "**********************************"
+    print "Broj i procenat pogodjenih slova:"
+    print "Ukupno pogodjenih: %.0f " %(brPogodjenih), "od: ", len(abeceda2)
+    print "a to je: %.2f %%" %(procenat)
+
+    print "**********************************"
+    print "Broj i procenat pogodjenih reci : "
+    reci = ["SHE","IS","A", "GIRL","HE","IS","A","BOY"]
+    brPogodjenihReci = 0.00
+    indeks2 =0
+    for t in tekst.split(' '):
+        if t==reci[indeks2]:
+            brPogodjenihReci+=1
+        indeks2+=1
+    brSlova = len(reci)
+    procenatPogodjenihReci = (brPogodjenihReci/brSlova)*100
+    print "Ukupno pogodjenih reci: %.0f " % (brPogodjenihReci), "od: ", len(reci)
+    print "a to je: %.2f %%" % (procenatPogodjenihReci)
+
+def test10(model, abeceda):
+    image_color = ucitavanje_slike('images/test/test10.png')
+    img = binarizacija_slike(konvertovanje_slike_u_sivo(image_color))
+    regioni, slova, razmaci = selektovanje_regiona(image_color.copy(), img)
+    #prikaz_slike(regioni)
+    print 'Broj prepoznatih regiona:', len(slova)
+
+    razmaci = np.array(razmaci).reshape(len(razmaci), 1)
+    k_means = KMeans(n_clusters=2, max_iter=2000, tol=0.00001, n_init=10)
+    k_means.fit(razmaci)
+
+    inputs = spremi_za_nm(slova)
+    results = model.predict(np.array(inputs, np.float32))
+    tekst = prikaz_rezultata(results, abeceda, k_means)
+    print tekst
+
+    pricaj(tekst)
+
+    abeceda2 = ['I','A','M','T','E','S','T','I','N','G','P','R','O','J','E','C','T']
+
+    brPogodjenih=0.00
+    index=0
+    print len(abeceda2)
+    for idx, output in enumerate(results[0:, :]):
+        if abeceda[odredjivanje_pobednika(output)]==abeceda2[index]:
+            brPogodjenih+=1
+        index+=1
+    brAbecede = len(abeceda2)
+    procenat = (brPogodjenih/brAbecede)*100.00
+    print "**********************************"
+    print "Broj i procenat pogodjenih slova:"
+    print "Ukupno pogodjenih: %.0f " %(brPogodjenih), "od: ", len(abeceda2)
+    print "a to je: %.2f %%" %(procenat)
+
+    print "**********************************"
+    print "Broj i procenat pogodjenih reci : "
+    reci = ["I","AM","TESTING","PROJECT"]
+    brPogodjenihReci = 0.00
+    indeks2 =0
+    for t in tekst.split(' '):
+        if t==reci[indeks2]:
+            brPogodjenihReci+=1
+        indeks2+=1
+    brSlova = len(reci)
+    procenatPogodjenihReci = (brPogodjenihReci/brSlova)*100
+    print "Ukupno pogodjenih reci: %.0f " % (brPogodjenihReci), "od: ", len(reci)
+    print "a to je: %.2f %%" % (procenatPogodjenihReci)
+
 def main():
     slika, slika_bin = obradi_sliku()
     #plt.imshow(slika_bin,'gray')
     #plt.show()
     regioni, slova, razmaci = selektuj_regione(slika, slika_bin)
     model, abeceda = istreniraj(slova)
-    test5(model, abeceda)
+    test1(model, abeceda)
     #test2(model, abeceda)
     #test3(model, abeceda)
+    #test4(model, abeceda)
+    #test5(model, abeceda)
+    #test6(model, abeceda)
+    #test7(model, abeceda)
+    #test8(model, abeceda)
+    #test9(model, abeceda)
+    #test10(model, abeceda)
 
 if __name__ == "__main__":
     main()
